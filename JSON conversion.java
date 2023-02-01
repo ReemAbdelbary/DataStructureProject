@@ -1,5 +1,5 @@
  public static ArrayList<String> json (ArrayList<String> data){
-    	// store output + concat.
+    	// store output 
     	ArrayList<String> xmlJson = new ArrayList<String>();
     	
     	xmlJson.add("{");
@@ -24,8 +24,11 @@
        if(dV.matches("(.*)<(.*)</(.*)")) {
     	   int st;
     	   st = dV.indexOf(">");
+    	   
     	   for(int t =st+1; dataChars[t]!='<';t++) {
-    		   cont+= dataChars[t];
+    		   if(dataChars[t]!='\t'||(dataChars[t])!=' ') {
+    			   cont+= dataChars[t];
+    		   }  
     	   }
        }
            for(f=0; f<dataChars.length; f++){
@@ -37,18 +40,16 @@
                        int j = i+1;
                     
                        while(dataChars[j] != '>'){
+                    	   if(dataChars[j]!='\t'||dataChars[j]!=' ') {
                             nameChar += dataChars[j];
                             j++;  
-      
+                    	   }
                         }
                        
                      if(dataChars[j] == '>') {
                     	j++;
     
-                       } 
-                      
-                     
-               
+                       }
                        if (nameChar.equals(tagName.peek())) {
                     	    pre = tagName.peek();
                     	  
@@ -59,15 +60,17 @@
                   
                    else {
                 	   while(dataChars[i] != '>'){
+                		   if(dataChars[i]!='\t'||dataChars[i]!=' ') {
                            nameChar1 += dataChars[i];
                            i++;
+                           }
                 	   }
                 
                 		   
                 	   tagName.add(nameChar1);
                 	   for(int t=0;t<tagName.size()-1;t++)
                 		   tabs+="   ";
-                //	   tabsPre=tabs;
+               
                 	   if(!pre.equals(nameChar1)) {
                 		   
                 		   if(nameChar1.matches("(.*)s"))
@@ -81,7 +84,7 @@
            }
         }
            if (!dV.contains("<")) {
-        	   String temp = xmlJson.get(xmlJson.size()-1);//pre element
+        	   String temp = xmlJson.get(xmlJson.size()-1);
         	   if(!temp.contains(","))
         	   xmlJson.set(xmlJson.size()-1, tabs+temp+"\""+dV+"\""+","); 
         	   else {
@@ -92,7 +95,7 @@
         		  al+=" ";
         		  
         		   xmlJson.add(al+"\""+dV+"\""); 
-        		   xmlJson.add(al+"]"); 
+        		   xmlJson.add("                "+"]"); 
         	   }
         	  }
     }
@@ -104,7 +107,7 @@
     	  }
     	  xmlJson.set(z, check);
       }  
-        xmlJson.add("  }"); 
+        xmlJson.add("         ]"+"\n"+"  }"); 
         xmlJson.add("}"); 
         return xmlJson;
         }
