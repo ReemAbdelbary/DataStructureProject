@@ -172,3 +172,63 @@ public class Data  {
 				dataOS.close();
 			}
 }
+class TreeNode implements Comparable<TreeNode> {
+
+	// for huffman
+	protected int frequency;
+	protected TreeNode leftChild;
+	protected TreeNode rightChild;
+
+	public TreeNode(TreeNode leftChild, TreeNode rightChild) {
+		frequency = leftChild.frequency + rightChild.frequency;
+		this.leftChild = leftChild;
+		this.rightChild = rightChild;
+	}
+	public TreeNode(int freq) {
+		frequency = freq;
+		leftChild = null;
+		rightChild = null;
+	}
+
+	public TreeNode() {
+		leftChild = null;
+		rightChild = null;
+		frequency = 0;
+	}
+
+	@Override
+	public int compareTo(TreeNode nodeToCompare) {
+		if (frequency == nodeToCompare.frequency) {
+			return 0;
+		} else if (frequency > nodeToCompare.frequency) {
+			return 1;
+		} else {
+			return -1;
+		}
+	}
+
+}
+
+class Leaf extends TreeNode {
+	private char character;
+
+	public Leaf(char character, int frequency) {
+		super(frequency);
+		this.character = character;
+	}
+
+	public Leaf() {
+		super();
+		character = ' ';
+	}
+
+	public char getCharacter() {
+		return character;
+	}
+
+	public void setCharacter(char c) {
+		character = c;
+	}
+
+}
+
