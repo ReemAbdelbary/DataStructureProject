@@ -241,4 +241,31 @@ public class XMLanalysis extends Phase1 {
 }
  return mutual;
    }
+  public String influencer(ArrayList<String> LinesNoSpace){
+       User[] users = getUsers(LinesNoSpace);
+       int MostRepeated = 0;
+       User MostInfluencer = users[0];
+       
+       for(User u: users){
+           String Id = u.ID;
+           int Repeats =0;
+           for(User x : users){
+               if(x.equals(u)){
+                   continue;
+               }
+               else{
+                   if(x.Followers.contains(Id)){
+                       Repeats ++;
+                   }
+               }
+           }
+           if(Repeats > MostRepeated){
+               MostInfluencer = u;
+               MostRepeated = Repeats;
+           }
+       }
+       return("Data of most influencer is: " + "\n" + "ID: " + MostInfluencer.ID + "\n" +"Name: "+ MostInfluencer.name + "\n"+ "Number of Followers is :" + MostRepeated);
+               
+   }
+
 }
