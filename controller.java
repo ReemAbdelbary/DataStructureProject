@@ -115,4 +115,144 @@ public class FXMLController implements Initializable  {
         ArrayList<String> NoSpace = Obj.spaceRemover(result);
         output.setText(Obj.XMLminify(NoSpace));
     }
+	    @FXML
+    private void btnPrettify(ActionEvent event) {
+        Phase1 Obj = new Phase1();
+        String Lines = "";
+          String[] resultarray = XMLScreen.getText().split("\n");
+        ArrayList<String> result = new ArrayList<String>();
+         for(int x=0; x<resultarray.length; x++){
+            result.add(resultarray[x]);
+        }
+         ArrayList<String> NoSpace = Obj.spaceRemover(result);
+         ArrayList<String> PrettifyResult = Obj.XMLprettify(NoSpace);
+         for(String s: PrettifyResult){
+            Lines += s + "\n";
+        }
+         output.setText(Lines);
+    }
+
+    @FXML
+    private void btnJSON(ActionEvent event) {
+        Phase1 Obj = new Phase1();
+        String Lines = "";
+          String[] resultarray = XMLScreen.getText().split("\n");
+        ArrayList<String> result = new ArrayList<String>();
+         for(int x=0; x<resultarray.length; x++){
+            result.add(resultarray[x]);
+        }
+        ArrayList<String> NoSpace = Obj.spaceRemover(result);
+        ArrayList<String> JsonResult = Obj.json(NoSpace);
+        for(String s: JsonResult){
+            Lines += s + "\n";
+            System.out.println(s);
+        }
+        output.setText(Lines);
+        
+        
+    }
+
+    @FXML
+    private void btnValidate(ActionEvent event) {
+        Phase1 Obj = new Phase1();
+        String[] resultarray = XMLScreen.getText().split("\n");
+        ArrayList<String> result = new ArrayList<String>();
+         for(int x=0; x<resultarray.length; x++){
+            result.add(resultarray[x]);
+        }
+         Object[] validationResult = Obj.validation(result);
+        ArrayList<String> correctedResult = new ArrayList<String>();
+        int x =0;
+        String s ="";
+        boolean error = false;
+        while(!(((Integer)validationResult[0] == -1) && ((Integer)validationResult[2] ==-1))){
+             error = true;
+             
+            s += "Mismatched tags in Lines:" +validationResult[0] +"&" + validationResult[2] + "\n" +"tags:" + validationResult[1] + "&" + validationResult[3] + "\n";
+            if(x==0){
+               correctedResult = Obj.correction(validationResult, result); 
+               x++;
+            }
+            else{
+                correctedResult = Obj.correction(validationResult, correctedResult); 
+            }
+            validationResult = Obj.validation(correctedResult);  
+        }
+        if(error){
+            s += "This File isn't Valid" +"\n" + "If you want to correct it press Correct";
+        }
+        
+        else{
+            s += "This file is valid";
+        }
+        
+        output.setText(s);
+    }
+
+    @FXML
+    private void btnCorrect(ActionEvent event) {
+        Phase1 Obj = new Phase1();
+         String[] resultarray = XMLScreen.getText().split("\n");
+        ArrayList<String> result = new ArrayList<String>();
+         for(int x=0; x<resultarray.length; x++){
+            result.add(resultarray[x]);
+        }
+         Object[] validationResult = Obj.validation(result);
+        ArrayList<String> correctedResult = new ArrayList<String>();
+        int x =0;
+        String s ="";
+        boolean error = false;
+        while(!(((Integer)validationResult[0] == -1) && ((Integer)validationResult[2] ==-1))){
+             error = true;
+            if(x==0){
+               correctedResult = Obj.correction(validationResult, result); 
+               x++;
+            }
+            else{
+                correctedResult = Obj.correction(validationResult, correctedResult); 
+            }
+            validationResult = Obj.validation(correctedResult);  
+        }
+        for(String k: correctedResult){
+            s += k + "\n";
+           
+        }
+        output.setText(s);
+    }
+
+    @FXML
+    private void btnCompress(ActionEvent event) {
+        
+        String str="";
+        Phase1 Obj = new Phase1();
+        String[] resultarray = XMLScreen.getText().split("\n");
+        ArrayList<String> result = new ArrayList<String>();
+         for(int x=0; x<resultarray.length; x++){
+            result.add(resultarray[x]);
+        }
+
+         ArrayList<String> LinesNoSpace = Obj.spaceRemover(result);
+         String minified = Obj.XMLminify(LinesNoSpace);
+         String clear = minified.substring(4); 
+
+          //System.out.println(clear);
+
+    StringBuilder g = Obj.encode(clear);
+    String nn = g.toString();
+    try {
+         Obj.Compress(nn,compressPath.getText());
+       } 
+    catch (IOException e) {
+
+        e.printStackTrace();
+    }
+
+//    System.out.println(g);
+//    StringBuilder n = Obj.decode(g,huffmanRoot);
+    str += "The file is saved in the given path" + "\n";
+    str += "The binary Representation: " + nn + "\n";
+    output.setText(str);
+    
+    }
+
 }
