@@ -254,5 +254,91 @@ public class FXMLController implements Initializable  {
     output.setText(str);
     
     }
+	@FXML
+    private void btnDecompress(ActionEvent event) {
+         Phase1 Obj = new Phase1();
+        String Lines = "";
+       String[] resultarray = XMLScreen.getText().split("\n");
+        ArrayList<String> result = new ArrayList<String>();
+         for(int x=0; x<resultarray.length; x++){
+            result.add(resultarray[x]);
+        }
+        for(String s: result){
+            Lines += s + "\n";
+        }
+        output.setText(Lines);
+    }
+
+    @FXML
+    private void btnSave(ActionEvent event) {
+        String savePATH = compressPath.getText();
+        String g = output.getText();
+           Path path = Paths.get(savePATH);
+                 byte[] bytes = g.getBytes(StandardCharsets.UTF_8);
+
+                 try {
+                     Files.write(path, bytes);
+                     output.setText("Successfully written data to the file");
+
+                 }
+                 catch (IOException e) {
+                     e.printStackTrace();
+                 }
+    }
+
+    @FXML
+    private void btnGetMutual(ActionEvent event) {
+         XMLanalysis obj = new XMLanalysis();
+         Phase1 Obj1 = new Phase1();
+         String str = "";
+        String[] resultarray = XMLScreen.getText().split("\n");
+        ArrayList<String> result = new ArrayList<String>();
+         for(int x=0; x<resultarray.length; x++){
+            result.add(resultarray[x]);
+        }
+        ArrayList<String> LinesNoSpace = Obj1.spaceRemover(result);
+        ArrayList<String> Mutual = obj.MutualUsers(User1.getText(), User2.getText(), LinesNoSpace);
+        str += "Mutual Users: " + "\n";
+        
+        for(String s : Mutual){
+            str += "User ID: " + s +"\n";
+            
+        }
+        output.setText(str);
+       
+    }
+
+    @FXML
+    private void btnReadManual(ActionEvent event) {
+        Phase1 Obj1 = new Phase1();
+        ArrayList<String> str = Obj1.ReadXMLManual(Path.getText());
+        String Lines = "";
+        for(String s: str){
+            Lines += s + "\n";
+        }
+        XMLScreen.setText(Lines);
+    }
+
+    @FXML
+    private void btnSuggest(ActionEvent event) {
+        XMLanalysis obj = new XMLanalysis();
+        Phase1 Obj1 = new Phase1();
+         String str = "";
+         String[] resultarray = XMLScreen.getText().split("\n");
+        ArrayList<String> result = new ArrayList<String>();
+         for(int x=0; x<resultarray.length; x++){
+            result.add(resultarray[x]);
+        }
+        ArrayList<String> LinesNoSpace = Obj1.spaceRemover(result);
+        ArrayList<String> Suggestions = obj.Suggestions(User1.getText(), LinesNoSpace);
+         str += "Suggested Users: " + "\n";
+        
+        for(String s : Suggestions){
+            str += "User ID: " + s +"\n";
+            
+        }
+        output.setText(str);
+        
+    }
 
 }
