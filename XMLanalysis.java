@@ -179,4 +179,66 @@ public class XMLanalysis extends Phase1 {
         
         return Suggestions;
    }
+   public String search(String word, ArrayList<String> LinesNoSpace){
+       User[] users = getUsers(LinesNoSpace);
+       boolean found = false;
+       String result = "";
+       boolean firstFound = false;
+       
+       
+       for(User u: users){
+           
+           int indexx=0;
+           for(Post x : u.Posts){
+               found = false;
+               if(x.body.contains(word)){
+                   found=true;
+                   firstFound = true;
+                   indexx++;
+               }
+               if(x.topics.contains(word)){
+                   found = true; 
+                   firstFound = true;
+                   indexx++;
+               }
+               if(found){
+                   if(indexx==1){
+                       result += "Name is: " + u.name + "\n" + "ID is: " + u.ID + "\n";
+                   }
+                   result += "Body is: " + x.body + "\n" + "Topics is: "+ x.topics + "\n";
+               }
+           }   
+       }
+       if(!firstFound){
+               result += "Word isn't Found";
+           }
+       return result;
+   }
+   public ArrayList<String> MutualUsers (String ID1, String ID2, ArrayList<String> LinesNoSpace){
+       User [] users = getUsers(LinesNoSpace);
+       User u1 = new User();
+       User u2 = new User();
+       ArrayList<String> F1;
+       ArrayList<String> F2;
+       ArrayList<String> mutual = new ArrayList<String>();
+       for(User x : users){
+           if(x.ID.equals(ID1)  ){
+               u1 = x;
+           }
+           if(x.ID.equals(ID2)){
+               u2 = x;
+           }
+       }
+       F1 = u1.Followers;
+       F2=u2.Followers;
+       
+       for(String y : F1){
+        for(String u : F2){
+        if(y.equals(u)){
+            mutual.add(y);
+        }
+    }
+}
+ return mutual;
+   }
 }
