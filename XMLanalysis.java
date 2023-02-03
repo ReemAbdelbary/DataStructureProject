@@ -267,5 +267,21 @@ public class XMLanalysis extends Phase1 {
        return("Data of most influencer is: " + "\n" + "ID: " + MostInfluencer.ID + "\n" +"Name: "+ MostInfluencer.name + "\n"+ "Number of Followers is :" + MostRepeated);
                
    }
+  public String MostActive(ArrayList<String> LinesNoSpace){
+       User [] users = getUsers(LinesNoSpace);
+       int MostFollowers = 0;
+       User mostActiveUser = users[0];
+       
+       for(User u : users){
+           if(u.Followers.size() > MostFollowers){
+               MostFollowers = u.Followers.size();
+               mostActiveUser = u;
+           }
+           
+       }
+//       mostActiveUser.print();
+       return ("Most Active User Data:" + "\n"+ "Name: " + mostActiveUser.name +"\n" +"ID: "+  mostActiveUser.ID + "\n" + "Number of Following: " + MostFollowers);
+       
+   }
 
 }
